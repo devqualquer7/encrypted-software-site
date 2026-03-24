@@ -1,25 +1,178 @@
 ---
-// src/components/Hero.astro
+// src/components/Hero.astro — Visual Tech Premium + 3D Particles
 ---
-<section id="inicio" class="min-h-screen flex items-center justify-center text-center">
-  <div class="max-w-3xl px-6">
-    <h1 class="text-5xl md:text-7xl font-bold text-gray-100 leading-tight">
-      Desenvolvendo o Futuro com <span class="text-red-500">Código Seguro</span> </h1>
-    <p class="mt-6 text-lg text-gray-400">
-      Criamos softwares sob medida com foco total em segurança, performance e usabilidade. Transformamos suas ideias em soluções digitais robustas e confiáveis.
+<section id="inicio" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+  <!-- Background Effects -->
+  <div class="glow-orb-red absolute top-1/4 left-1/4 w-[300px] sm:w-[400px] md:w-[600px] h-[300px] sm:h-[400px] md:h-[600px] opacity-20"></div>
+  <div class="glow-orb-red absolute bottom-1/4 right-1/4 w-[200px] sm:w-[300px] md:w-[400px] h-[200px] sm:h-[300px] md:h-[400px] opacity-15"></div>
+
+  <!-- Three.js 3D Particles Container -->
+  <div id="three-container" class="absolute inset-0 w-full h-full"></div>
+
+  <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center pt-20 sm:pt-0">
+    <!-- Badge -->
+    <div class="hero-fade hero-fade-1">
+      <span class="section-badge mb-6 sm:mb-8 inline-flex text-[0.65rem] sm:text-xs">
+        <span class="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-red-500 animate-pulse"></span>
+        Tecnologia de Ponta &bull; 2026
+      </span>
+    </div>
+
+    <!-- Headline with Typing Effect -->
+    <h1 class="hero-fade hero-fade-2 text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-[1.1] sm:leading-[1.05] tracking-tight mb-6 sm:mb-8">
+      Código que<br/>
+      <span class="text-gradient typing-wrapper">
+        <span id="typing-text"></span>
+        <span class="typing-cursor">|</span>
+      </span>
+    </h1>
+
+    <!-- Subtitle -->
+    <p class="hero-fade hero-fade-3 text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-8 sm:mb-12 leading-relaxed px-2">
+      Especialistas em desenvolvimento de softwares criptografados e infraestrutura de segurança para empresas que buscam o estado da arte.
     </p>
-    <div class="mt-8 flex justify-center gap-4">
-      <a href="#servicos" 
-         class="bg-red-500 text-white font-bold py-3 px-6 rounded-md hover:bg-red-600 transition-colors"> Nossas Soluções
+
+    <!-- CTAs -->
+    <div class="hero-fade hero-fade-4 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4 sm:px-0">
+      <a href="#servicos" class="btn-primary w-full sm:w-auto justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Explorar Soluções
       </a>
-      <a href="#contato" 
-         class="border border-gray-700 text-gray-300 font-bold py-3 px-6 rounded-md hover:bg-gray-800 transition-colors"> Fale Conosco
+      <a href="#contato" class="btn-secondary w-full sm:w-auto justify-center">
+        Fale Conosco
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </a>
     </div>
-    <div class="max-w-3xl px-6">
-  <h1 class="text-5xl md:text-7xl font-bold ... animate-on-scroll">...</h1>
-  <p class="mt-6 text-lg ... animate-on-scroll">...</p>
-  <div class="mt-8 flex justify-center gap-4 animate-on-scroll">...</div>
-</div>
+
+    <!-- Trust Badges -->
+    <div class="hero-fade hero-fade-5 mt-10 sm:mt-16 flex flex-col sm:flex-row flex-wrap justify-center gap-4 sm:gap-8 text-xs sm:text-sm text-gray-500">
+      <div class="flex items-center gap-2 justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Segurança Certificada
+      </div>
+      <div class="flex items-center gap-2 justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        +1M Faturados p/ Clientes
+      </div>
+      <div class="flex items-center gap-2 justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        99.99% Uptime
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll Indicator -->
+  <div class="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 animate-float hidden sm:block">
+    <div class="w-6 h-10 rounded-full border-2 border-white/20 flex justify-center pt-2">
+      <div class="w-1 h-3 rounded-full bg-red-500 animate-bounce"></div>
+    </div>
   </div>
 </section>
+
+<style>
+  #three-container {
+    pointer-events: none;
+  }
+  #three-container canvas {
+    pointer-events: auto;
+  }
+
+  @keyframes heroFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero-fade {
+    opacity: 0;
+    animation: heroFadeUp 0.8s ease-out forwards;
+  }
+  .hero-fade-1 { animation-delay: 0.1s; }
+  .hero-fade-2 { animation-delay: 0.25s; }
+  .hero-fade-3 { animation-delay: 0.45s; }
+  .hero-fade-4 { animation-delay: 0.6s; }
+  .hero-fade-5 { animation-delay: 0.8s; }
+
+  /* ── Typing Effect ── */
+  .typing-wrapper {
+    display: inline-flex;
+    align-items: baseline;
+  }
+
+  #typing-text {
+    display: inline;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .typing-cursor {
+    display: inline-block;
+    margin-left: 2px;
+    animation: blink 0.7s step-end infinite;
+    font-weight: 300;
+    background: linear-gradient(135deg, #ff1a1a, #ff6b6b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+</style>
+
+<script>
+  const phrases = [
+    "Protege o Futuro",
+    "Gera Resultados",
+    "Escala Negócios",
+    "Transforma Ideias"
+  ];
+
+  const el = document.getElementById('typing-text');
+  if (el) {
+    let phraseIdx = 0;
+    let charIdx = 0;
+    let isDeleting = false;
+    let pauseTimer = 0;
+
+    function tick() {
+      const current = phrases[phraseIdx];
+
+      if (!isDeleting) {
+        // Typing
+        el.textContent = current.substring(0, charIdx + 1);
+        charIdx++;
+
+        if (charIdx === current.length) {
+          // Pause before deleting
+          pauseTimer = setTimeout(() => {
+            isDeleting = true;
+            tick();
+          }, 2200);
+          return;
+        }
+        setTimeout(tick, 70 + Math.random() * 40);
+      } else {
+        // Deleting
+        el.textContent = current.substring(0, charIdx - 1);
+        charIdx--;
+
+        if (charIdx === 0) {
+          isDeleting = false;
+          phraseIdx = (phraseIdx + 1) % phrases.length;
+          setTimeout(tick, 400);
+          return;
+        }
+        setTimeout(tick, 35 + Math.random() * 20);
+      }
+    }
+
+    // Start after hero animation completes
+    setTimeout(tick, 1200);
+  }
+</script>

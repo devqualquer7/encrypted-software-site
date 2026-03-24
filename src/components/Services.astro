@@ -1,63 +1,51 @@
 ---
-// src/components/Services.astro
-
-// Um array de objetos para facilitar a adição ou remoção de serviços no futuro
+// src/components/Services.astro — Cards Premium Responsive
 const services = [
   {
-    icon: `
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 12l4.179 2.25M6.429 9.75L2.25 12l4.179 2.25m11.142 0l-5.571 3-5.571-3" />
-        <path stroke-linecap="round" stroke-linejoin="round" d="M19.771 9.75L2.25 12l17.521 2.25" />
-      </svg>
-    `,
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
     title: "Desenvolvimento Web",
-    description: "Criamos sistemas, APIs e landing pages seguras e performáticas, utilizando as tecnologias mais modernas do mercado."
+    description: "Sistemas, APIs e landing pages com arquitetura segura e performance de ponta. React, Node.js, e tecnologias modernas."
   },
   {
-    icon: `
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
-      </svg>
-    `,
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>`,
     title: "Aplicações Mobile",
-    description: "Desenvolvemos aplicativos nativos e híbridos para iOS e Android, focados em uma experiência de usuário fluida e intuitiva."
+    description: "Apps nativos e híbridos para iOS e Android com UX fluida, intuitiva e focada em retenção de usuários."
   },
   {
-    icon: `
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.286zm0 13.036h3.75" />
-      </svg>
-    `,
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>`,
     title: "Consultoria em Segurança",
-    description: "Analisamos seus sistemas existentes em busca de vulnerabilidades, fortalecendo sua infraestrutura contra ameaças digitais."
+    description: "Análise completa de vulnerabilidades, pentest e fortalecimento da sua infraestrutura contra ameaças digitais."
   },
   {
-    icon: `
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 100 15 7.5 7.5 0 000-15zM21 21l-5.69-5.69" />
-      </svg>
-    `,
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`,
     title: "Marketing Digital",
-    description: "Planejamos e executamos estratégias de marketing digital para aumentar a visibilidade e o alcance do seu software no mercado."
+    description: "Estratégias de growth, Meta Ads e funis de conversão para escalar sua operação e dominar o mercado digital."
   }
 ];
 ---
 
-<section id="servicos" class="py-20 bg-gray-950">
-  <div class="max-w-7xl mx-auto px-8">
-    <div class="text-center">
-      <h2 class="text-4xl font-bold text-gray-100">Nossas Soluções</h2>
-      <p class="mt-4 text-lg text-gray-400">Oferecemos um portfólio completo para impulsionar seu projeto.</p>
+<section id="servicos" class="relative py-16 sm:py-24 md:py-32">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+    <!-- Section Header -->
+    <div class="text-center mb-10 sm:mb-16" data-reveal>
+      <span class="section-badge mb-4 inline-flex">Nossos Serviços</span>
+      <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mt-4">
+        Soluções que <span class="text-gradient">Impulsionam</span>
+      </h2>
+      <p class="mt-3 sm:mt-4 text-gray-400 max-w-2xl mx-auto text-base sm:text-lg px-2">
+        Do conceito à execução, oferecemos um portfólio completo de serviços para transformar seu projeto em realidade.
+      </p>
     </div>
 
-    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-      {services.map(service => (
-        <div class="bg-gray-800 border border-gray-700 rounded-lg p-8 transform transition-transform hover:-translate-y-2">
-          <div class="inline-block bg-gray-900 p-3 rounded-md">
-            <div class="h-8 w-8 text-red-500" set:html={service.icon} />
+    <!-- Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      {services.map((service, i) => (
+        <div class="service-card" data-reveal>
+          <div class="service-icon">
+            <div class="w-6 h-6" set:html={service.icon} />
           </div>
-          <h3 class="mt-6 text-xl font-bold text-gray-100">{service.title}</h3>
-          <p class="mt-2 text-gray-400">{service.description}</p>
+          <h3 class="text-base sm:text-lg font-bold text-white mb-2 sm:mb-3">{service.title}</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">{service.description}</p>
         </div>
       ))}
     </div>
