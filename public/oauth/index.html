@@ -929,6 +929,9 @@
       show('state-success')
       setupManualFallback(code, savedName)
 
+      // Make manual fallback visible immediately (collapsed) for user convenience
+      document.getElementById('manual-section').style.display = 'block'
+
       startStatusPolling(code)
     } catch (e) {
       console.error(e)
