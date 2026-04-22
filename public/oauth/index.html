@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>EncryptedSoftware · Autorização Mercado Pago</title>
+<title>EncryptedSoftware · Conectar Mercado Pago</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg:        #060610;
@@ -19,6 +19,7 @@
     --red-deep:  #cc1b35;
     --green:     #00e396;
     --yellow:    #ffc83d;
+    --orange:    #ff8c2c;
     --blue:      #4ea8f7;
     --text:      #e4e4f4;
     --dim:       #9a9ab5;
@@ -28,7 +29,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   html, body {
-    height: 100%;
+    min-height: 100vh;
     background: var(--bg);
     color: var(--text);
     font-family: 'Inter', system-ui, sans-serif;
@@ -48,357 +49,631 @@
     z-index: 0;
   }
 
-  /* Top red glow */
+  /* Radial red glow */
   body::after {
     content: '';
-    position: fixed;
-    top: -40vh; left: 50%;
-    width: 80vw; height: 80vh;
-    background: radial-gradient(ellipse, rgba(255,43,74,0.12) 0%, transparent 65%);
-    transform: translateX(-50%);
+    position: fixed; inset: 0;
+    background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(255, 43, 74, 0.08), transparent 60%);
     pointer-events: none;
     z-index: 0;
   }
 
   .wrap {
-    position: relative;
-    z-index: 1;
+    position: relative; z-index: 10;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 20px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 32px 20px;
+  }
+
+  .card {
+    width: 100%; max-width: 460px;
+    background: rgba(11,11,22,0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
   }
 
   .brand {
     text-align: center;
-    margin-bottom: 36px;
-    animation: slideDown 0.6s ease-out;
+    margin-bottom: 28px;
   }
-
-  .brand-title {
+  .logo-box {
+    width: 64px; height: 64px;
+    margin: 0 auto 16px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(255,43,74,0.15), rgba(255,43,74,0.05));
+    border: 1px solid rgba(255,43,74,0.3);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 30px rgba(255,43,74,0.2);
+  }
+  .logo-box svg { width: 32px; height: 32px; stroke: var(--red); }
+  .brand-name {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 32px;
     font-weight: 700;
-    letter-spacing: 3px;
+    font-size: 18px;
+    letter-spacing: 0.15em;
   }
-  .brand-title .white { color: var(--text); }
-  .brand-title .red   { color: var(--red); }
-
+  .brand-name .red { color: var(--red); }
   .brand-sub {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
     color: var(--muted);
-    letter-spacing: 4px;
-    margin-top: 4px;
+    font-size: 10px;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
+    margin-top: 6px;
   }
 
-  .card {
-    width: 100%;
-    max-width: 560px;
-    background: rgba(11, 11, 22, 0.8);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 32px;
-    position: relative;
-    overflow: hidden;
-    animation: slideUp 0.6s ease-out 0.1s backwards;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  .title {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 8px;
   }
-
-  .card::before {
-    content: '';
-    position: absolute;
-    inset-inline: 0; top: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,43,74,0.7), transparent);
-  }
-
-  .status-icon {
-    width: 64px; height: 64px;
-    border-radius: 18px;
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 20px;
-    font-size: 34px;
-    font-weight: bold;
-  }
-  .status-icon.success {
-    background: rgba(0,227,150,0.1);
-    border: 1px solid rgba(0,227,150,0.4);
-    color: var(--green);
-    box-shadow: 0 0 30px rgba(0,227,150,0.3);
-    animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s backwards;
-  }
-  .status-icon.error {
-    background: rgba(255,43,74,0.1);
-    border: 1px solid rgba(255,43,74,0.4);
+  .title::before {
+    content: '▸';
     color: var(--red);
   }
-  .status-icon.pending {
-    background: rgba(78,168,247,0.1);
-    border: 1px solid rgba(78,168,247,0.4);
-    color: var(--blue);
-  }
 
-  h1 {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 16px;
-    letter-spacing: 3px;
-    text-align: center;
-    margin-bottom: 6px;
-    text-transform: uppercase;
-  }
-  h1.success { color: var(--green); }
-  h1.error   { color: var(--red); }
-  h1.pending { color: var(--blue); }
-
-  .subtitle {
-    text-align: center;
-    color: var(--dim);
-    font-size: 13px;
-    margin-bottom: 28px;
-    line-height: 1.5;
-  }
-
+  /* Form */
+  .field { margin-bottom: 16px; }
   .label {
     font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 2px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
+    color: var(--muted);
     margin-bottom: 8px;
+    display: block;
   }
-
-  .code-box {
+  .input {
+    width: 100%;
     background: var(--card2);
     border: 1px solid var(--border);
     border-radius: 10px;
-    padding: 16px;
+    padding: 12px 14px;
     font-family: 'JetBrains Mono', monospace;
-    color: var(--green);
     font-size: 14px;
-    word-break: break-all;
-    line-height: 1.6;
-    margin-bottom: 14px;
-    user-select: all;
-    -webkit-user-select: all;
-    cursor: text;
-    position: relative;
+    color: var(--text);
+    outline: none;
+    transition: all 0.15s;
+  }
+  .input:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(255,43,74,0.15);
+  }
+  .input::placeholder { color: var(--muted); }
+  .hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 6px;
   }
 
-  .code-box.pulse {
-    animation: glow-pulse 2.5s ease-in-out infinite;
-  }
-
+  /* Button */
   .btn {
     width: 100%;
+    padding: 14px 20px;
+    border-radius: 12px;
+    border: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .btn-primary {
     background: var(--red-deep);
     color: white;
-    border: none;
-    padding: 14px 20px;
+    box-shadow: 0 0 20px rgba(255,43,74,0.25);
+  }
+  .btn-primary:hover { background: var(--red); box-shadow: 0 0 30px rgba(255,43,74,0.4); }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary:disabled {
+    opacity: 0.5; cursor: not-allowed;
+    background: var(--card2); color: var(--muted); box-shadow: none;
+  }
+
+  /* States */
+  .state { display: none; }
+  .state.active { display: block; animation: fadeIn 0.3s; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.5; }
+  }
+
+  /* Success state */
+  .success-icon {
+    width: 70px; height: 70px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: rgba(0,227,150,0.1);
+    border: 2px solid rgba(0,227,150,0.4);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 40px rgba(0,227,150,0.25);
+  }
+  .success-icon svg { width: 36px; height: 36px; stroke: var(--green); stroke-width: 3; }
+
+  .success-title {
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.15em;
+    color: var(--green);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .success-sub {
+    text-align: center;
+    color: var(--dim);
+    font-size: 13px;
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  .success-name {
+    display: inline-block;
+    background: rgba(0,227,150,0.1);
+    border: 1px solid rgba(0,227,150,0.3);
+    color: var(--green);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+  }
+
+  /* Status pill animation */
+  .status-pill {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px 16px;
+    background: var(--card2);
+    border: 1px solid var(--border);
     border-radius: 10px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .btn:hover { background: var(--red); box-shadow: 0 0 20px rgba(255,43,74,0.4); }
-  .btn:active { transform: scale(0.98); }
-  .btn.success { background: rgba(0,227,150,0.12); color: var(--green); border: 1px solid rgba(0,227,150,0.3); }
-  .btn.success:hover { background: rgba(0,227,150,0.2); }
-
-  .instructions {
-    background: rgba(78,168,247,0.06);
-    border: 1px solid rgba(78,168,247,0.25);
-    border-radius: 10px;
-    padding: 14px 16px;
-    margin-top: 20px;
-    font-size: 12px;
-    line-height: 1.7;
-    color: var(--dim);
-  }
-  .instructions strong { color: var(--text); }
-  .instructions .num {
-    display: inline-block;
-    width: 20px; height: 20px;
-    background: rgba(78,168,247,0.15);
-    color: var(--blue);
-    border-radius: 50%;
-    text-align: center;
-    line-height: 20px;
-    font-weight: bold;
-    margin-right: 6px;
     font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+  }
+  .status-pill .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--yellow);
+    animation: pulse 1.4s ease-in-out infinite;
+    box-shadow: 0 0 10px var(--yellow);
+  }
+  .status-pill.consumed .dot {
+    background: var(--green);
+    box-shadow: 0 0 10px var(--green);
+    animation: none;
+  }
+
+  /* Error state */
+  .error-box {
+    background: rgba(255,43,74,0.08);
+    border: 1px solid rgba(255,43,74,0.35);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .error-box svg { flex-shrink: 0; width: 16px; height: 16px; stroke: var(--red); margin-top: 2px; }
+  .error-box .err-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--red);
+    line-height: 1.5;
+  }
+
+  /* Spinner */
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
   }
 
   .footer {
-    margin-top: 32px;
     text-align: center;
+    margin-top: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+  }
+  .footer .bar {
+    display: inline-block;
+    width: 30px; height: 1px;
+    background: var(--border);
+    vertical-align: middle;
+    margin: 0 8px;
+  }
+
+  /* Info box */
+  .info-box {
+    background: rgba(78,168,247,0.06);
+    border: 1px solid rgba(78,168,247,0.2);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--dim);
+    line-height: 1.6;
+  }
+  .info-box strong {
+    color: var(--blue);
+    font-weight: 600;
+  }
+
+  /* Manual fallback */
+  .manual-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  .manual-toggle {
+    background: none;
+    border: none;
     color: var(--muted);
     font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
-    letter-spacing: 2px;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+    margin: 0 auto;
   }
+  .manual-toggle:hover { color: var(--dim); }
+  .manual-body { display: none; margin-top: 16px; }
+  .manual-body.open { display: block; }
 
-  .copied-toast {
-    position: fixed;
-    top: 20px; left: 50%;
-    transform: translateX(-50%) translateY(-100px);
-    background: rgba(0,227,150,0.15);
-    border: 1px solid var(--green);
-    color: var(--green);
-    padding: 10px 18px;
+  .code-box {
+    background: var(--card2);
+    border: 1px solid var(--border-hi);
     border-radius: 10px;
+    padding: 14px;
+    word-break: break-all;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    z-index: 10;
-    opacity: 0;
-    transition: all 0.3s ease-out;
-    pointer-events: none;
-    backdrop-filter: blur(10px);
-  }
-  .copied-toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    font-size: 11px;
+    color: var(--red);
+    line-height: 1.5;
+    margin-bottom: 10px;
+    max-height: 140px;
+    overflow-y: auto;
   }
 
-  @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to   { opacity: 1; transform: translateY(0); }
+  .btn-copy {
+    background: transparent;
+    border: 1px solid var(--border-hi);
+    color: var(--dim);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.15s;
   }
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(15px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes popIn {
-    0%   { transform: scale(0) rotate(-180deg); opacity: 0; }
-    100% { transform: scale(1) rotate(0); opacity: 1; }
-  }
-  @keyframes glow-pulse {
-    0%, 100% { box-shadow: 0 0 0 rgba(0,227,150,0); }
-    50%      { box-shadow: 0 0 25px rgba(0,227,150,0.25); }
-  }
-
-  /* Scan line effect */
-  .card.success::after {
-    content: '';
-    position: absolute;
-    inset-inline: 0; top: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--green), transparent);
-    animation: scan 4s linear infinite;
-  }
-  @keyframes scan {
-    0%   { transform: translateY(0); opacity: 0; }
-    10%  { opacity: 1; }
-    90%  { opacity: 1; }
-    100% { transform: translateY(400px); opacity: 0; }
-  }
+  .btn-copy:hover { color: var(--red); border-color: var(--red); }
+  .btn-copy.copied { background: rgba(0,227,150,0.1); color: var(--green); border-color: var(--green); }
 </style>
 </head>
 <body>
 
 <div class="wrap">
-  <div class="brand">
-    <div class="brand-title">
-      <span class="white">ENCRYPTED</span><span class="red">SOFTWARE</span>
+  <div class="card">
+
+    <div class="brand">
+      <div class="logo-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2 L4 6 v6 c0 5.5 3.5 10 8 11 4.5-1 8-5.5 8-11 V6 L12 2z"/>
+          <path d="M9 12 l2 2 l4-4"/>
+        </svg>
+      </div>
+      <div class="brand-name">ENCRYPTED<span class="red">SOFTWARE</span></div>
+      <div class="brand-sub">CONEXÃO DE CONTA · MERCADO PAGO</div>
     </div>
-    <div class="brand-sub">Autorização Mercado Pago</div>
-  </div>
 
-  <div class="card" id="card">
-    <!-- Content injected by JS -->
-  </div>
+    <!-- ESTADO 1: Formulário inicial -->
+    <div id="state-form" class="state active">
+      <div class="title">Conectar sua conta</div>
 
-  <div class="footer">🔒 Conexão segura via OAuth 2.0 · Mercado Pago</div>
+      <div class="info-box">
+        Preencha o nome e clique em <strong>CONECTAR</strong>.<br>
+        Você vai fazer login no Mercado Pago e autorizar o acesso. Depois volta aqui automaticamente.
+      </div>
+
+      <div class="field">
+        <label class="label" for="acc-name">Nome da conta</label>
+        <input id="acc-name" class="input" type="text" placeholder="Ex: R7 - FULANO" autocomplete="off" maxlength="60" />
+        <div class="hint">Esse nome vai identificar sua conta no software</div>
+      </div>
+
+      <div id="form-error" style="display:none"></div>
+
+      <button id="btn-connect" class="btn btn-primary" onclick="startConnect()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        CONECTAR MERCADO PAGO
+      </button>
+    </div>
+
+    <!-- ESTADO 2: Processando -->
+    <div id="state-processing" class="state">
+      <div style="text-align:center; padding: 20px 0;">
+        <div style="width: 56px; height: 56px; margin: 0 auto 20px; border: 3px solid var(--border); border-top-color: var(--red); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:13px; color: var(--dim); letter-spacing:0.1em;">
+          PROCESSANDO CONEXÃO...
+        </div>
+      </div>
+    </div>
+
+    <!-- ESTADO 3: Sucesso automático -->
+    <div id="state-success" class="state">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="success-title">AUTORIZAÇÃO RECEBIDA</div>
+      <div class="success-sub">
+        Conta <span class="success-name" id="success-name">—</span><br>
+        foi enviada para o sistema com segurança.
+      </div>
+
+      <div id="status-pill" class="status-pill">
+        <div class="dot"></div>
+        <span id="status-text">AGUARDANDO ADMIN CONECTAR...</span>
+      </div>
+
+      <div style="margin-top: 20px; font-family: 'Inter', sans-serif; font-size: 12px; color: var(--muted); text-align: center; line-height: 1.6;">
+        O administrador vai ver sua solicitação em alguns segundos.<br>
+        Você pode fechar esta aba.
+      </div>
+
+      <!-- Fallback manual (caso upload falhe) -->
+      <div class="manual-section" id="manual-section" style="display:none">
+        <button class="manual-toggle" onclick="toggleManual()">
+          <span id="manual-icon">▸</span> COPIAR CÓDIGO MANUALMENTE
+        </button>
+        <div class="manual-body" id="manual-body">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color: var(--muted); margin-bottom:10px; line-height:1.6;">
+            Se o envio automático falhar, copie o código abaixo e envie para o administrador:
+          </div>
+          <div class="code-box" id="code-display"></div>
+          <button class="btn-copy" onclick="copyManual()">
+            <span id="copy-text">COPIAR CÓDIGO + NOME</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ESTADO 4: Erro -->
+    <div id="state-error" class="state">
+      <div class="error-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div class="err-text" id="error-text">—</div>
+      </div>
+      <button class="btn btn-primary" onclick="location.href='/oauth/'">
+        TENTAR NOVAMENTE
+      </button>
+    </div>
+
+    <div class="footer">
+      <span class="bar"></span>
+      ENCRYPTED · CHECKOUT MP
+      <span class="bar"></span>
+    </div>
+  </div>
 </div>
 
-<div class="copied-toast" id="toast">✓ Código copiado!</div>
-
 <script>
-  const card = document.getElementById('card')
-  const toast = document.getElementById('toast')
+  // ────────────────── CONFIGURAÇÃO ──────────────────
+  const SUPABASE_URL  = 'https://qhbygqanbrtuhcrrscfc.supabase.co'
+  const SUPABASE_KEY  = 'sb_publishable_cdgS_0MVQjHpCYhqkKElFA_XMQjL8HG'
+  const MP_CLIENT_ID  = '6427522176437630'
+  const REDIRECT_URI  = 'https://encryptedgroup.com/oauth/'
 
-  function showToast(msg) {
-    toast.textContent = '✓ ' + msg
-    toast.classList.add('show')
-    setTimeout(() => toast.classList.remove('show'), 2200)
+  // ────────────────── ESTADOS ──────────────────
+  function show(stateId) {
+    document.querySelectorAll('.state').forEach(s => s.classList.remove('active'))
+    document.getElementById(stateId).classList.add('active')
   }
 
-  function copyText(txt) {
-    navigator.clipboard.writeText(txt)
-      .then(() => showToast('Código copiado!'))
-      .catch(() => {
-        // Fallback for older browsers
-        const ta = document.createElement('textarea')
-        ta.value = txt; document.body.appendChild(ta)
-        ta.select(); document.execCommand('copy')
-        document.body.removeChild(ta)
-        showToast('Código copiado!')
-      })
+  function showError(msg) {
+    document.getElementById('error-text').textContent = msg
+    show('state-error')
   }
 
-  const params = new URLSearchParams(window.location.search)
+  function showFormError(msg) {
+    const el = document.getElementById('form-error')
+    el.style.display = 'block'
+    el.innerHTML = `<div class="error-box"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><div class="err-text">${msg}</div></div>`
+  }
+
+  // ────────────────── FLUXO ──────────────────
+
+  // Ao carregar: verifica se é retorno do MP (com ?code=...)
+  const params = new URLSearchParams(location.search)
   const code   = params.get('code')
-  const error  = params.get('error_description') || params.get('error')
+  const state  = params.get('state')
+  const errQp  = params.get('error')
 
-  if (error) {
-    card.classList.add('error')
-    card.innerHTML = `
-      <div class="status-icon error">✗</div>
-      <h1 class="error">Autorização Negada</h1>
-      <p class="subtitle">Não foi possível obter a autorização:<br>
-        <strong style="color:var(--red)">${decodeURIComponent(error)}</strong></p>
-      <p style="color:var(--dim);font-size:12px;text-align:center;margin-top:20px">
-        Feche esta janela e tente novamente no software.
-      </p>
-    `
+  if (errQp) {
+    showError('Autorização cancelada ou negada. Tente novamente.')
   } else if (code) {
-    card.classList.add('success')
-    card.innerHTML = `
-      <div class="status-icon success">✓</div>
-      <h1 class="success">Autorização Concluída</h1>
-      <p class="subtitle">
-        Copie o código abaixo e envie para quem te mandou este link
-      </p>
-
-      <div class="label">▸ Código de autorização</div>
-      <div class="code-box pulse" id="code">${code}</div>
-
-      <button class="btn success" onclick="copyText('${code}')">
-        📋 COPIAR CÓDIGO
-      </button>
-
-      <div class="instructions">
-        <div style="margin-bottom:10px"><strong>Próximos passos:</strong></div>
-        <div><span class="num">1</span>Copie o código acima (botão ou seleção manual)</div>
-        <div><span class="num">2</span>Envie de volta via WhatsApp / mesma conversa</div>
-        <div><span class="num">3</span>Importante: envie em até <strong style="color:var(--yellow)">10 minutos</strong> (depois disso expira)</div>
-      </div>
-    `
-
-    // Auto-copy attempt
-    setTimeout(() => {
-      try { copyText(code) } catch(_) {}
-    }, 600)
-
+    // Voltou do MP com código!
+    handleReturn(code, state)
   } else {
-    card.classList.add('pending')
-    card.innerHTML = `
-      <div class="status-icon pending">?</div>
-      <h1 class="pending">Aguardando Autorização</h1>
-      <p class="subtitle">
-        Esta página deve ser acessada através de um link enviado pelo software.
-      </p>
-      <p style="color:var(--muted);font-size:11px;text-align:center;margin-top:20px;font-family:'JetBrains Mono',monospace">
-        Se você chegou aqui por engano, pode fechar esta janela.
-      </p>
-    `
+    // Primeira visita
+    const savedName = sessionStorage.getItem('enc_pending_name')
+    if (savedName) {
+      document.getElementById('acc-name').value = savedName
+    }
+  }
+
+  function startConnect() {
+    const name = document.getElementById('acc-name').value.trim()
+    if (!name || name.length < 2) {
+      showFormError('Digite um nome de ao menos 2 caracteres.')
+      return
+    }
+    if (name.length > 60) {
+      showFormError('Nome muito longo (máximo 60 caracteres).')
+      return
+    }
+
+    // Salva o nome pra recuperar quando voltar
+    sessionStorage.setItem('enc_pending_name', name)
+
+    // Gera state único pra validação
+    const stateId = 's_' + Math.random().toString(36).slice(2, 12)
+    sessionStorage.setItem('enc_pending_state', stateId)
+
+    // Scopes necessários pro MP
+    const scopes = 'read+write+offline_access'
+
+    // Monta URL de autorização MP
+    const url = `https://auth.mercadopago.com.br/authorization?client_id=${MP_CLIENT_ID}&response_type=code&platform_id=mp&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&state=${stateId}&scope=${scopes}`
+
+    location.href = url
+  }
+
+  async function handleReturn(code, state) {
+    show('state-processing')
+
+    const savedName  = sessionStorage.getItem('enc_pending_name') || 'Conta MP'
+    const savedState = sessionStorage.getItem('enc_pending_state')
+
+    // Validação de state (proteção contra CSRF)
+    if (savedState && state && state !== savedState) {
+      showError('Erro de validação de segurança (state inválido). Tente de novo.')
+      return
+    }
+
+    // Mostra nome imediatamente no sucesso
+    document.getElementById('success-name').textContent = savedName
+
+    // Envia pro Supabase
+    try {
+      const resp = await fetch(`${SUPABASE_URL}/rest/v1/pending_auths`, {
+        method: 'POST',
+        headers: {
+          'Content-Type':  'application/json',
+          'apikey':        SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Prefer':        'return=minimal'
+        },
+        body: JSON.stringify({
+          code: code,
+          account_name: savedName,
+          state: state || null,
+          user_agent: navigator.userAgent.slice(0, 200)
+        })
+      })
+
+      if (!resp.ok) {
+        const txt = await resp.text()
+        console.error('Supabase error:', resp.status, txt)
+        // Ativa fallback manual
+        setupManualFallback(code, savedName)
+        show('state-success')
+        document.getElementById('manual-section').style.display = 'block'
+        document.getElementById('status-pill').innerHTML = '<div class="dot"></div><span>ENVIO AUTOMÁTICO FALHOU · COPIE MANUALMENTE ABAIXO</span>'
+        document.getElementById('status-pill').style.borderColor = 'var(--orange)'
+        return
+      }
+
+      // Sucesso! Limpa sessionStorage
+      sessionStorage.removeItem('enc_pending_state')
+      sessionStorage.removeItem('enc_pending_name')
+
+      show('state-success')
+      setupManualFallback(code, savedName)    // habilita fallback caso user queira
+
+      // Começa a pollar pra ver se foi consumido
+      startStatusPolling(code)
+    } catch (e) {
+      console.error(e)
+      setupManualFallback(code, savedName)
+      show('state-success')
+      document.getElementById('manual-section').style.display = 'block'
+      document.getElementById('status-pill').innerHTML = '<div class="dot"></div><span>SEM CONEXÃO · COPIE MANUALMENTE ABAIXO</span>'
+      document.getElementById('status-pill').style.borderColor = 'var(--orange)'
+    }
+  }
+
+  function setupManualFallback(code, name) {
+    const manualText = `NOME: ${name}\nCODIGO: ${code}`
+    document.getElementById('code-display').textContent = manualText
+    window._manualText = manualText
+  }
+
+  function toggleManual() {
+    const body = document.getElementById('manual-body')
+    const icon = document.getElementById('manual-icon')
+    const open = body.classList.toggle('open')
+    icon.textContent = open ? '▾' : '▸'
+  }
+
+  async function copyManual() {
+    try {
+      await navigator.clipboard.writeText(window._manualText)
+      const btn = document.querySelector('.btn-copy')
+      const txt = document.getElementById('copy-text')
+      btn.classList.add('copied')
+      txt.textContent = '✓ COPIADO'
+      setTimeout(() => { btn.classList.remove('copied'); txt.textContent = 'COPIAR CÓDIGO + NOME' }, 2500)
+    } catch {
+      alert('Copiado! (se não funcionar, selecione o texto acima manualmente)')
+    }
+  }
+
+  // Poll pra mostrar quando admin conectou
+  let pollTimer = null
+  async function startStatusPolling(code) {
+    let tries = 0
+    const maxTries = 120   // 10 min
+    pollTimer = setInterval(async () => {
+      tries++
+      if (tries > maxTries) {
+        clearInterval(pollTimer)
+        document.getElementById('status-text').textContent = 'TEMPO ESGOTADO · FALE COM O ADMIN'
+        return
+      }
+      try {
+        const resp = await fetch(`${SUPABASE_URL}/rest/v1/pending_auths?code=eq.${encodeURIComponent(code)}&select=consumed`, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        })
+        const data = await resp.json()
+        if (Array.isArray(data) && data[0] && data[0].consumed) {
+          clearInterval(pollTimer)
+          const pill = document.getElementById('status-pill')
+          pill.classList.add('consumed')
+          document.getElementById('status-text').textContent = 'CONECTADO NO SISTEMA COM SUCESSO!'
+        }
+      } catch {}
+    }, 5000)
   }
 </script>
 
