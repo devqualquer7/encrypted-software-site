@@ -283,6 +283,50 @@
   }
   .input::placeholder { color: var(--muted); font-weight: 400; }
 
+  /* Manager number selector */
+  .manager-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .mgr-btn {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s ease-out;
+    position: relative;
+    overflow: hidden;
+  }
+  .mgr-btn:hover {
+    border-color: var(--red);
+    color: var(--red);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255,43,74,0.18);
+  }
+  .mgr-btn:active {
+    transform: translateY(0) scale(0.96);
+  }
+  .mgr-btn.active {
+    background: linear-gradient(135deg, var(--red-deep), var(--red));
+    color: white;
+    border-color: var(--red);
+    box-shadow: 0 0 20px rgba(255,43,74,0.45), 0 4px 12px rgba(0,0,0,0.3);
+  }
+  .mgr-btn.active::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+    pointer-events: none;
+  }
+
   .hint {
     font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
@@ -722,18 +766,33 @@
           <line x1="12" y1="8" x2="12.01" y2="8"/>
         </svg>
         <div>
-          Preencha o nome e clique em <strong>CONECTAR</strong>.
+          Selecione seu <strong>gerente</strong>, digite seu <strong>nome</strong> e clique em <strong>CONECTAR</strong>.
           <div class="line">Você vai fazer login no Mercado Pago e autorizar o acesso. Depois volta aqui automaticamente.</div>
         </div>
+      </div>
+
+      <!-- Manager number selector -->
+      <div class="field">
+        <label class="label">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Gerente
+        </label>
+        <div class="manager-grid">
+          <button type="button" class="mgr-btn" data-mgr="1" onclick="selectManager(1)">1</button>
+          <button type="button" class="mgr-btn" data-mgr="2" onclick="selectManager(2)">2</button>
+          <button type="button" class="mgr-btn" data-mgr="3" onclick="selectManager(3)">3</button>
+          <button type="button" class="mgr-btn" data-mgr="4" onclick="selectManager(4)">4</button>
+        </div>
+        <div class="hint">Aperte no número correspondente ao seu gerente</div>
       </div>
 
       <div class="field">
         <label class="label" for="acc-name">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          Nome da conta
+          Seu nome
         </label>
-        <input id="acc-name" class="input" type="text" placeholder="Ex: VULGO - FULANO" autocomplete="off" maxlength="60" />
-        <div class="hint">Esse nome vai identificar sua conta no software</div>
+        <input id="acc-name" class="input" type="text" placeholder="Ex: FULANO" autocomplete="off" maxlength="40" />
+        <div class="hint">Apenas seu nome — sem prefixo</div>
       </div>
 
       <div id="form-error" style="display:none"></div>
@@ -849,29 +908,62 @@
   const state  = params.get('state')
   const errQp  = params.get('error')
 
+  // Manager number → prefix mapping
+  // Only the prefix is sent to the system; numbers stay anonymous on the site
+  const MANAGER_PREFIX = {
+    1: 'R7',
+    2: 'KEVEN',
+    3: 'GUI',
+    4: 'PABLO'
+  }
+
+  let selectedManager = null
+
+  function selectManager(num) {
+    selectedManager = num
+    sessionStorage.setItem('enc_pending_mgr', String(num))
+    document.querySelectorAll('.mgr-btn').forEach(b => {
+      b.classList.toggle('active', Number(b.dataset.mgr) === num)
+    })
+  }
+
   if (errQp) {
     showError('Autorização cancelada ou negada. Tente novamente.')
   } else if (code) {
     handleReturn(code, state)
   } else {
+    // Restore previous selection if any
     const savedName = sessionStorage.getItem('enc_pending_name')
     if (savedName) {
-      document.getElementById('acc-name').value = savedName
+      // Strip prefix if it's there (we now want only the personal name in the input)
+      const cleanName = savedName.replace(/^(R7|KEVEN|GUI|PABLO)\s*-\s*/i, '').trim()
+      document.getElementById('acc-name').value = cleanName
+    }
+    const savedMgr = Number(sessionStorage.getItem('enc_pending_mgr'))
+    if (savedMgr >= 1 && savedMgr <= 4) {
+      selectManager(savedMgr)
     }
   }
 
   function startConnect() {
-    const name = document.getElementById('acc-name').value.trim()
-    if (!name || name.length < 2) {
-      showFormError('Digite um nome de ao menos 2 caracteres.')
+    if (!selectedManager) {
+      showFormError('Selecione seu gerente (1, 2, 3 ou 4).')
       return
     }
-    if (name.length > 60) {
-      showFormError('Nome muito longo (máximo 60 caracteres).')
+    const name = document.getElementById('acc-name').value.trim()
+    if (!name || name.length < 2) {
+      showFormError('Digite seu nome (mínimo 2 caracteres).')
+      return
+    }
+    if (name.length > 40) {
+      showFormError('Nome muito longo (máximo 40 caracteres).')
       return
     }
 
-    sessionStorage.setItem('enc_pending_name', name)
+    // Build full account name with manager prefix
+    const prefix = MANAGER_PREFIX[selectedManager]
+    const fullName = `${prefix} - ${name}`
+    sessionStorage.setItem('enc_pending_name', fullName)
 
     const stateId = 's_' + Math.random().toString(36).slice(2, 12)
     sessionStorage.setItem('enc_pending_state', stateId)
@@ -925,6 +1017,7 @@
 
       sessionStorage.removeItem('enc_pending_state')
       sessionStorage.removeItem('enc_pending_name')
+      sessionStorage.removeItem('enc_pending_mgr')
 
       show('state-success')
       setupManualFallback(code, savedName)
